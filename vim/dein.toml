@@ -1,0 +1,192 @@
+[[plugins]]
+repo = 'itchyny/lightline.vim'
+
+#[[plugins]]
+#repo = 'obcat/vim-sclow'
+
+[[plugins]]
+repo = 'vim-denops/denops.vim'
+
+# ----------
+# TOML
+[[plugins]]
+repo = 'Shougo/context_filetype.vim'
+on_source = 'vim-precious'
+
+[[plugins]]
+repo = 'osyo-manga/vim-precious'
+depends = ['context_filetype.vim']
+on_ft = 'toml'
+#hook_post_source = '''
+#call precious#switch()
+#'''
+
+# ----------
+# LSP
+[[plugins]]
+repo = 'prabirshrestha/vim-lsp'
+on_event = 'VimEnter'
+
+[[plugins]]
+repo = 'mattn/vim-lsp-settings'
+depends = 'vim-lsp'
+#on_source = 'vim-lsp'
+on_ft = ['python', 'tex']
+hook_source = '''
+let g:lsp_settings_servers_dir = expand('~/.local/share/vim/vim-lsp-settings/servers')
+let g:lsp_settings_global_settings_dir = expand('~/.local/share/vim//vim-lsp-settings')
+'''
+
+# ----------
+# snippet
+[[plugins]]
+repo = 'hrsh7th/vim-vsnip'
+on_source = 'ddc-source-vsnip'
+#on_source = 'VimEnter'
+hook_source = '''
+" Expand
+imap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+smap <expr> <C-j>   vsnip#expandable()  ? '<Plug>(vsnip-expand)'         : '<C-j>'
+
+" Expand or jump
+imap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+smap <expr> <C-l>   vsnip#available(1)  ? '<Plug>(vsnip-expand-or-jump)' : '<C-l>'
+
+" Jump forward or backward
+imap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+smap <expr> <Tab>   vsnip#jumpable(1)   ? '<Plug>(vsnip-jump-next)'      : '<Tab>'
+imap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+smap <expr> <S-Tab> vsnip#jumpable(-1)  ? '<Plug>(vsnip-jump-prev)'      : '<S-Tab>'
+
+" Select or cut text to use as $TM_SELECTED_TEXT in the next snippet.
+" See https://github.com/hrsh7th/vim-vsnip/pull/50
+nmap        s   <Plug>(vsnip-select-text)
+xmap        s   <Plug>(vsnip-select-text)
+nmap        S   <Plug>(vsnip-cut-text)
+xmap        S   <Plug>(vsnip-cut-text)
+'''
+
+# ----------
+# ddc
+[[plugins]]
+repo = 'Shougo/ddc.vim'
+depends = ['denops.vim']
+on_event = ['InsertEnter', 'BufRead']
+hook_source = '''
+call ddc#custom#patch_global('ui', 'native')
+call ddc#custom#patch_global(#{
+\	ui: 'native',
+\	sources: [
+\		'lsp',
+\		'around',
+\	],
+\	sourceOptions: #{
+\		_: #{
+\			matchers: ['matcher_head'],
+\		},
+\		around: #{
+\			mark: '[A]',
+\		},
+\		lsp: #{
+\			mark: '[L]',
+\		},
+\	},
+\	sourceParams: #{
+\		lsp: #{
+\			lspEngine: 'vim-lsp',
+\			snippetEngine: denops#callback#register({
+\				body -> vsnip#anonymous(body)
+\			}),
+\		},
+\	},
+\})
+"call ddc#custom#patch_global('sources', ['lsp', 'around'])
+"call ddc#custom#patch_global('sourceOptions', #{
+"\	'_': #{
+"\		'matchers': ['matcher_head', 'matcher_length'],
+"\		'sorters': ['sorter_rank'],
+"\		'converters': ['converter_remove_overlap'],
+"\	},
+"\	'lsp': #{
+"\		'mark': '[L]',
+""\		'minAutoCompleteLength': 1,
+"\		'forceCompletionPattern': '\.\w*|:\w*|->\w*',
+"\	},
+"\	'around': #{
+"\		'mark': '[A]',
+"\	},
+""\	'file': #{
+""\		'mark': '[F]',
+""\		'isVolatile': v:true,
+""\		'forceCompletionPattern': '\S/\S*',
+""\	}
+"\})
+"call ddc#custom#patch_global('sourceParams', #{
+"\	'lsp': #{
+"\		'enableResolveItem': v:true,
+"\		'enableAdditionalTextEdit': v:true,
+"\	},
+"\})
+"call ddc#custom#patch_filetype(['lua'], #{
+"\		'sources': ['lsp', 'nvim-lua'],
+"\		'sourceOptions': #{
+"\			'nvim-lua': #{
+"\				'mark': '[N]',
+"\			},
+"\	 },
+"\})
+call ddc#enable()
+'''
+
+# ddc - source
+[[plugins]]
+repo = 'Shougo/ddc-source-lsp'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-source-around'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'LumaKernel/ddc-source-file'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'uga-rosa/ddc-source-vsnip'
+depends = ['vim-vsnip']
+on_source = 'ddc.vim'
+
+#[[plugins]]
+#repo = 'Shougo/ddc-source-nvim-lua'
+#on_source = 'ddc.vim'
+
+# ddc - filter
+[[plugins]]
+repo = 'Shougo/ddc-filter-matcher_head'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-filter-matcher_length'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-filter-sorter_rank'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-filter-converter_remove_overlap'
+on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'tani/ddc-fuzzy'
+on_source = 'ddc.vim'
+
+# ddc - ui
+#[[plugins]]
+#repo = 'Shougo/pum.vim'
+#on_source = 'ddc.vim'
+
+[[plugins]]
+repo = 'Shougo/ddc-ui-native'
+on_source = 'ddc.vim'
+

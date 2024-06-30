@@ -1,0 +1,104 @@
+vim9script
+autocmd!
+
+# - - - - -
+# dein
+# - - - - -
+
+var dein_dir = expand('~/.local/share/vim/dein')
+var dein_repo_dir = dein_dir .. '/repos/github.com/Shougo/dein.vim'
+if !isdirectory(dein_repo_dir)
+  execute '!git clone https://github.com/Shougo/dein.vim' dein_repo_dir
+endif
+if &runtimepath !~# '/dein.vim'
+  execute 'set runtimepath^=' .. fnamemodify(dein_repo_dir, ':p')
+endif
+
+var dein_toml_dir = expand('~/.vim/')
+var dein_toml = dein_toml_dir .. '/dein.toml'
+
+call dein#begin(dein_dir)
+call dein#load_toml(dein_toml)
+call dein#end()
+
+if dein#check_install()
+  call dein#install()
+endif
+
+
+# - - - - -
+# option
+# - - - - -
+
+set encoding=utf-8
+set fileencodings=ucs-bom,utf-8,sjis,euc-jp,cp932,default
+lang en_US.UTF-8
+#set term=xterm
+set guioptions-=m
+set guioptions-=T
+filetype plugin indent on
+syntax enable
+#colorscheme evening
+colorscheme torte
+#highlight Cursor cterm=reverse gui=reverse
+set cursorline
+#highlight clear CursorLine
+highlight CursorLine term=underline ctermfg=NONE ctermbg=NONE
+highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
+highlight CursorLine gui=underline guifg=NONE guibg=NONE
+#set guicursor=n-v-c-sm:block-Cursor,i-ci-ve:ver25-iCursor,r-cr-o:hor20
+set laststatus=2
+set listchars=tab:>_,trail:_
+set list
+set autoindent
+#set backspace=indent,eol,start
+set tabstop=4
+set shiftwidth=4
+set number
+set wildmenu
+set wildmode=full
+set hlsearch
+set shortmess-=S
+set clipboard&
+set matchpairs+=<:>,（:）,「:」,『:』,＜:＞,【:】,［:］
+
+
+# - - - - -
+# keymap
+# - - - - -
+
+nnoremap j gj
+nnoremap k gk
+nnoremap <silent> <F2> :wa<CR>
+nnoremap <silent> <F3> :bprev<CR>
+nnoremap <silent> <F4> :bnext<CR>
+nnoremap <F5> gT
+nnoremap <F6> gt
+nnoremap x "_x
+nnoremap X "_X
+nnoremap Y y$
+nnoremap <A-j> :move .+1<CR>==
+xnoremap <A-j> :move '>+1<CR>gv=gv
+nnoremap <A-k> :move .-2<CR>==
+xnoremap <A-k> :move '<-2<CR>gv=gv
+nnoremap <silent> <F11> :tabnew<SPACE>$MYVIMRC<CR>
+nnoremap <silent> <F12> :wa<Bar>:source<SPACE>$MYVIMRC<CR>
+
+
+# - - - - -
+# autocmd
+# - - - - -
+
+augroup texCmd
+    autocmd!
+    autocmd BufRead main.tex call OpenSrcTexFiles()
+augroup END
+
+def OpenSrcTexFiles()
+    var src_files = globpath(expand('%:h') .. '/src', '*.tex', true, true)
+    for file in src_files
+        execute 'tabedit ' .. fnameescape(file)
+        setlocal filetype=tex
+    endfor
+enddef
+

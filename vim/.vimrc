@@ -1,5 +1,6 @@
 vim9script
 autocmd!
+set shellslash
 
 # - - - - -
 # dein
@@ -11,10 +12,11 @@ if !isdirectory(dein_repo_dir)
   execute '!git clone https://github.com/Shougo/dein.vim' dein_repo_dir
 endif
 if &runtimepath !~# '/dein.vim'
-  execute 'set runtimepath^=' .. fnamemodify(dein_repo_dir, ':p')
+  execute 'set runtimepath^=' .. fnamemodify(dein_repo_dir, ':p:gs?\\?/?')
 endif
 
 var dein_toml_dir = expand('~/.vim/')
+dein_toml_dir = fnamemodify(dein_toml_dir, ':gs?\\?/?')
 var dein_toml = dein_toml_dir .. '/dein.toml'
 
 call dein#begin(dein_dir)

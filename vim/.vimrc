@@ -15,7 +15,11 @@ if &runtimepath !~# '/dein.vim'
   execute 'set runtimepath^=' .. fnamemodify(dein_repo_dir, ':p:gs?\\?/?')
 endif
 
-var dein_toml_dir = expand('~/.vim/')
+if has('win32')
+  var dein_toml_dir = expand('~/vimfiles/')
+else
+  var dein_toml_dir = expand('~/.vim/')
+endif
 dein_toml_dir = fnamemodify(dein_toml_dir, ':gs?\\?/?')
 var dein_toml = dein_toml_dir .. '/dein.toml'
 

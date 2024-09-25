@@ -35,11 +35,16 @@ endif
 set encoding=utf-8
 set fileencodings=ucs-bom,utf-8,sjis,euc-jp,cp932,default
 lang en_US.UTF-8
+
 #set term=xterm
+
 set guioptions-=m
 set guioptions-=T
+
 filetype plugin indent on
 syntax enable
+
+set termguicolors
 #colorscheme evening
 colorscheme torte
 #highlight Cursor cterm=reverse gui=reverse
@@ -48,7 +53,14 @@ set cursorline
 highlight CursorLine term=underline ctermfg=NONE ctermbg=NONE
 highlight CursorLine cterm=underline ctermfg=NONE ctermbg=NONE
 highlight CursorLine gui=underline guifg=NONE guibg=NONE
+&t_SI = "\e[5 q"    # 挿入モード開始                -> バー点滅
+&t_SR = "\e[3 q"    # 置換モードの開始              -> 下線点滅
+&t_EI = "\e[1 q"    # 挿入または置換モード終了      -> ブロック点滅
+&t_ti ..= "\e[1 q"  # 端末を "termcap" モードにする -> ブロック点滅
+&t_te ..= "\e[0 q"  # "termcap" モードの終了        -> デフォルト (端末に依存するが、通常はブロック点滅)
 #set guicursor=n-v-c-sm:block-Cursor,i-ci-ve:ver25-iCursor,r-cr-o:hor20
+#set guicursor=n-v-c:block-Cursor/lCursor,ve:ver35-Cursor,o:hor50-Cursor,i-ci:hor25-Cursor/lCursor,r-cr:hor20-Cursor/lCursor,sm:block-Cursor-blinkwait175-blinkoff150-blinkon175
+
 set laststatus=2
 set listchars=tab:>_,trail:_
 set list

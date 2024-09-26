@@ -2,6 +2,8 @@ vim9script
 autocmd!
 set shellslash
 
+filetype plugin indent on
+
 # - - - - -
 # dein
 # - - - - -
@@ -46,9 +48,7 @@ lang en_US.UTF-8
 set guioptions-=m
 set guioptions-=T
 
-filetype plugin indent on
 syntax enable
-
 set termguicolors
 #colorscheme evening
 colorscheme torte
